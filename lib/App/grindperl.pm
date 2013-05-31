@@ -3,11 +3,12 @@ use strict;
 use warnings;
 
 package App::grindperl;
-our $VERSION = '0.001'; # VERSION
+our $VERSION = '0.002'; # VERSION
 
 use autodie;
 use Getopt::Lucid ':all';
 use Path::Class;
+use File::Spec;
 use Carp qw/carp croak/;
 use File::Copy qw/copy/;
 use File::HomeDir 0.98;
@@ -26,10 +27,11 @@ sub new {
     Param("jobs|j")->default(9),
     Param("testjobs|t")->default(9),
     Param("output|o"),
-    Param("install_root")->default("/tmp"),
+    Param("install_root")->default(File::Spec->tmpdir),
     Param("prefix"),
     Switch("debugging")->default(1),
     Switch("threads")->default(1),
+    Switch("32"),
     Switch("porting|p"),
     Switch("install"),
     Switch("config"),
@@ -95,9 +97,12 @@ sub configure_args {
   my ($self) = @_;
   my %defines = $self->opt->get_define;
   my @undefines = $self->opt->get_undefine;
-  my @args = qw/-des -Dusedevel/;
+  my @args = qw/-des -Dusedevel -Uversiononly/;
   push @args, "-Dusethreads" if $self->opt->get_threads;
   push @args, "-DDEBUGGING" if $self->opt->get_debugging;
+  push @args, "-Accflags=-m32", "-Alddlflags=-m32", "-Aldflags=-m32",
+    "-Uuse64bitint", "-Uuse64bitall", "-Uusemorebits"
+    if $self->opt->get_32;
   push @args, "-r" if $self->opt->get_cache;
   if ( ! $self->opt->get_man ) {
     push @args, qw/-Dman1dir=none -Dman3dir=none/;
@@ -233,10 +238,15 @@ sub run {
       $self->do_cmd("make -j $jobs test_porting")
         or croak ("make test_porting failed");
     }
-    else {
+    elsif ( grep { /test_harness/ } do { local(@ARGV,$/) = "Makefile"; <>} ) {
       $self->vlog("Running 'make test_harness' with $test_jobs jobs");
       $self->do_cmd("make -j $jobs test_harness")
-        or croak ("make test_harness failed");
+          or croak ("make test_harness failed");
+    }
+    else {
+      $self->vlog("Running 'make test' with $test_jobs jobs");
+      $self->do_cmd("make -j $jobs test")
+          or croak ("make test failed");
     }
   }
   else {
@@ -251,7 +261,7 @@ sub run {
       or croak("make install failed!");
   }
 
-  return 1;
+  return 0; # usually passed to exit
 }
 
 1;
@@ -262,7 +272,10 @@ sub run {
 # vim: ts=2 sts=2 sw=2 et:
 
 __END__
+
 =pod
+
+=encoding utf-8
 
 =head1 NAME
 
@@ -270,7 +283,7 @@ App::grindperl - Guts of the grindperl tool
 
 =head1 VERSION
 
-version 0.001
+version 0.002
 
 =head1 SYNOPSIS
 
@@ -303,24 +316,24 @@ run
 
 L<grindperl>
 
-=for :stopwords cpan testmatrix url annocpan anno bugtracker rt cpants kwalitee diff irc mailto metadata placeholders
+=for :stopwords cpan testmatrix url annocpan anno bugtracker rt cpants kwalitee diff irc mailto metadata placeholders metacpan
 
 =head1 SUPPORT
 
 =head2 Bugs / Feature Requests
 
-Please report any bugs or feature requests by email to C<bug-app-grindperl at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/Public/Dist/Display.html?Name=App-grindperl>. You will be automatically notified of any
-progress on the request by the system.
+Please report any bugs or feature requests through the issue tracker
+at L<https://github.com/dagolden/app-grindperl/issues>.
+You will be notified automatically of any progress on your issue.
 
 =head2 Source Code
 
 This is open source software.  The code repository is available for
 public review and contribution under the terms of the license.
 
-L<http://github.com/dagolden/app-grindperl>
+L<https://github.com/dagolden/app-grindperl>
 
-  git clone http://github.com/dagolden/app-grindperl
+  git clone git://github.com/dagolden/app-grindperl.git
 
 =head1 AUTHOR
 
@@ -335,4 +348,3 @@ This is free software, licensed under:
   The Apache License, Version 2.0, January 2004
 
 =cut
-

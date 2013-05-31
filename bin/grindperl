@@ -2,7 +2,7 @@
 use v5.10.0;
 use strict;
 use warnings;
-our $VERSION = '0.001'; # VERSION
+our $VERSION = '0.002'; # VERSION
 
 use App::grindperl;
 my $app = App::grindperl->new;
@@ -11,9 +11,9 @@ exit $app->run;
 # PODNAME: grindperl
 # ABSTRACT: Command-line tool to help build and test bleadperl
 
-
-
 =pod
+
+=encoding utf-8
 
 =head1 NAME
 
@@ -21,7 +21,7 @@ grindperl - Command-line tool to help build and test bleadperl
 
 =head1 VERSION
 
-version 0.001
+version 0.002
 
 =head1 SYNOPSIS
 
@@ -175,12 +175,12 @@ Defaults to false.
 
 =head2 --man
 
-Boolean flag.  When false, C<<< grindperl >>> will disable man diretories
+Boolean flag.  When false, C<<< grindperl >>> will disable man directories
 and man files will not be generated or installed.  Defaults to false.
 
 =head2 --verbose or -v
 
-Outputs some extra progress messages and warninsg.
+Outputs some extra progress messages and warnings.
 
 =head2 --define KEY=VALUE or -D KEY=VALUE
 
@@ -188,7 +188,13 @@ Outputs some extra progress messages and warninsg.
 
 May be specified multiple times with different values of KEY.  These
 set the C<<< -D >>> and C<<< -U >>> options for C<<< Configure >>>.  Not that unlike C<<< Configure >>>,
-these require a space between the opton and the key or keyE<sol>value pair.
+these require a space between the option and the key or keyE<sol>value pair.
+
+=head2 --32 (EXPERIMENTAL)
+
+This experimental flag tries to force as much 32-bitness as possible, even on
+a 64 bit operating system.  It's very hacky, messes with compiler and linker
+flags and is not guaranteed on all platforms.
 
 =head1 CONFIGURATION FILE
 
@@ -233,7 +239,6 @@ This is free software, licensed under:
   The Apache License, Version 2.0, January 2004
 
 =cut
-
 
 __END__
 

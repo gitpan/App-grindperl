@@ -2,7 +2,7 @@ NAME
     App::grindperl - Guts of the grindperl tool
 
 VERSION
-    version 0.001
+    version 0.002
 
 SYNOPSIS
        use App::grindperl;
@@ -17,19 +17,17 @@ SEE ALSO
 
 SUPPORT
   Bugs / Feature Requests
-    Please report any bugs or feature requests by email to
-    "bug-app-grindperl at rt.cpan.org", or through the web interface at
-    <http://rt.cpan.org/Public/Dist/Display.html?Name=App-grindperl>. You
-    will be automatically notified of any progress on the request by the
-    system.
+    Please report any bugs or feature requests through the issue tracker at
+    <https://github.com/dagolden/app-grindperl/issues>. You will be notified
+    automatically of any progress on your issue.
 
   Source Code
     This is open source software. The code repository is available for
     public review and contribution under the terms of the license.
 
-    <http://github.com/dagolden/app-grindperl>
+    <https://github.com/dagolden/app-grindperl>
 
-      git clone http://github.com/dagolden/app-grindperl
+      git clone git://github.com/dagolden/app-grindperl.git
 
 AUTHOR
     David Golden <dagolden@cpan.org>

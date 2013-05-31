@@ -3,13 +3,16 @@ abstract: 'Command-line tool to help build and test bleadperl'
 author:
   - 'David Golden <dagolden@cpan.org>'
 build_requires:
+  ExtUtils::MakeMaker: 0
   File::Find: 0
+  File::Spec::Functions: 0
   File::Temp: 0
+  List::Util: 0
   Test::More: 0
 configure_requires:
   ExtUtils::MakeMaker: 6.30
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 4.200009, CPAN::Meta::Converter version 2.110930'
+generated_by: 'Dist::Zilla version 4.300034, CPAN::Meta::Converter version 2.131490'
 license: apache
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -26,18 +29,21 @@ no_index:
 provides:
   App::grindperl:
     file: lib/App/grindperl.pm
-    version: 0.001
+    version: 0.002
 requires:
   Carp: 0
   File::Copy: 0
   File::HomeDir: 0.98
+  File::Spec: 0
   Getopt::Lucid: 0
   Path::Class: 0
   autodie: 0
   namespace::autoclean: 0
   perl: v5.10.0
+  strict: 0
+  warnings: 0
 resources:
-  bugtracker: http://rt.cpan.org/Public/Dist/Display.html?Name=App-grindperl
-  homepage: http://github.com/dagolden/app-grindperl
-  repository: http://github.com/dagolden/app-grindperl
-version: 0.001
+  bugtracker: https://github.com/dagolden/app-grindperl/issues
+  homepage: https://metacpan.org/release/App-grindperl
+  repository: git://github.com/dagolden/app-grindperl.git
+version: 0.002
